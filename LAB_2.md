@@ -13,9 +13,9 @@ fisierului log m mediul sistemului de operare trebuie sa se deosebeasca de cel l
 schema fizica. Este important ca baza de date creata sa fie compatibila cu sistemul MS SQL
 Server 2017 si ea sa fie accesibila numai unui singur utiliizator intr-un moment de timp.
 
-3. Creati planul de intretinere a bazei de date, construita m sarcina 1. Spatiul neutilizat de
+3. Creati planul de intretinere a bazei de date, construita in sarcina 1. Spatiul neutilizat de
 fisierele bazei de date trebuie indepartat atunci cand el atinge marimea 2000Mb. Spatiul
-eliberat trebuie sa fie returnat sistemului de operare. Aceasta operatiune trebuie sa ruleze m
+eliberat trebuie sa fie returnat sistemului de operare. Aceasta operatiune trebuie sa ruleze in
 fiecare vineri, la ora 00:00. Raportul executarii planului de intretinere trebuie salvat in dosarul
 MyDocuments\SQL_event_logs. lnitializati executarea planului. Dupa executare, verificati
 rezultatele in fisierul log.
