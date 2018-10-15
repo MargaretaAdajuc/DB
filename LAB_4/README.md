@@ -10,7 +10,7 @@ from studenti as s inner join studenti_reusita as sr
 on s.Id_Student=sr.Id_Student
 where Data_Evaluare like '2018-%-%';
 ```
-![Query #1]https://user-images.githubusercontent.com/34598688/46934389-40f47300-d060-11e8-83fd-b7d8917eec3d.png)
+![Query #1](https://user-images.githubusercontent.com/34598688/46934389-40f47300-d060-11e8-83fd-b7d8917eec3d.png)
 
 ##### 2: nr de ordine + 16
 
