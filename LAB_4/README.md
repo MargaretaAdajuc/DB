@@ -12,6 +12,14 @@ where Data_Evaluare like '2018-%-%';
 ```
 ![Query#1]https://user-images.githubusercontent.com/34598688/46934389-40f47300-d060-11e8-83fd-b7d8917eec3d.png)
 
-##### 2 nr de ordine + 16
+##### 2: nr de ordine + 16
 
-##### 3 random de la 28 la 39
+24. Sa se afiseze lista disciplinelor (Disciplina) predate de cel putin doi profesori.
+```
+```
+
+##### 3: random de la 28 la 39
+
+
+```
+```
