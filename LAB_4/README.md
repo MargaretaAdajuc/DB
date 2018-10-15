@@ -23,12 +23,17 @@ inner join profesori as p
 on p.Id_Profesor=sr.Id_Profesor
 group by d.Disciplina
 having (count (distinct sr.Id_Profesor)>2);
-
 ```
 ![Query #2](https://user-images.githubusercontent.com/34598688/46936758-10b0d280-d068-11e8-9360-eae3e66cb70a.png)
 
 ##### 3: random de la 28 la 39
 
-
+35. Gasiti denumirile disciplinelor si media notelor pe disciplina. Afisati numai disciplinele cu medii mai mari de 7.0.
 ```
+select d.Disciplina, AVG(sr.Nota)
+from discipline as d inner join studenti_reusita as sr
+on d.Id_Disciplina=sr.Id_Disciplina
+group by Disciplina
+having (AVG(sr.Nota)>7);
 ```
+![Query #3](https://user-images.githubusercontent.com/34598688/46937382-cf212700-d069-11e8-9747-9b1d5dcc9002.png)
