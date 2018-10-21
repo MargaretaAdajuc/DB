@@ -3,7 +3,7 @@
 
 ##### 1: nr de ordine
 
-8. Obtineti identificatorii si numele studentilor, ale examenelor sustinute in anul 2018
+8. Obțineti identificatorii și numele studenților ai examenelor susținute în anul 2018.
 ```
 select s.Id_Student, s.Nume_Student, sr.Data_Evaluare
 from studenti as s inner join studenti_reusita as sr
@@ -14,7 +14,7 @@ where Data_Evaluare like '2018-%-%';
 
 ##### 2: nr de ordine + 16
 
-24. Sa se afiseze lista disciplinelor (Disciplina) predate de cel putin doi profesori.
+24. Să se afișeze lista disciplinelor (Disciplina) predate de cel puțin doi profesori.
 ```
 select d.Disciplina, count (sr.Id_Profesor)
 from discipline as d inner join studenti_reusita as sr
@@ -28,12 +28,14 @@ having (count (distinct sr.Id_Profesor)>2);
 
 ##### 3: random de la 28 la 39
 
-35. Gasiti denumirile disciplinelor si media notelor pe disciplina. Afisati numai disciplinele cu medii mai mari de 7.0.
+30. Câți studenți au studiat, deja, disciplina Baze de date în 2018 și 2019 și care este media lor la reușita curentă?
 ```
-select d.Disciplina, AVG(sr.Nota)
-from discipline as d inner join studenti_reusita as sr
-on d.Id_Disciplina=sr.Id_Disciplina
-group by Disciplina
-having (AVG(sr.Nota)>7);
+select COUNT (sr.Id_Student), avg(Nota)
+from  studenti_reusita as sr inner join studenti as s
+on sr.Id_Student=s.Id_Student
+inner join discipline as d
+on d.Id_Disciplina = sr.Id_Disciplina
+where Data_Evaluare like '201[89]-%-%';
 ```
-![Query #3](https://user-images.githubusercontent.com/34598688/46937382-cf212700-d069-11e8-9747-9b1d5dcc9002.png)
+![Query #3](https://user-images.githubusercontent.com/34598688/47269453-6bfe2b80-d566-11e8-912c-4ad6dcde88f2.png)
+
