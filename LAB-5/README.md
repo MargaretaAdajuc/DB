@@ -22,7 +22,12 @@ else
 
 2. Afișati primele zece date (numele, prenumele studentului) în funcție de valoarea notei (cu exceptia notelor 6 și 8) a studentului la primul test al disciplinei Baze de date, folosind structura de altemativă IF...ELSE. Să se folosească variabilele.
 ```
-
+select top 10 s.Nume_Student, s.Prenume_Student, sr.Nota
+from studenti as s inner join studenti_reusita as sr
+on s.Id_Student = sr.Id_Student
+inner join discipline as d
+on d.Id_Disciplina = sr.Id_Disciplina
+where Tip_Evaluare = 'Testul 1' and d.Disciplina = 'Baze de date' and Nota <> 6 and Nota <> 8;
 ```
 
 
