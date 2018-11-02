@@ -29,6 +29,7 @@ inner join discipline as d
 on d.Id_Disciplina = sr.Id_Disciplina
 where Tip_Evaluare = 'Testul 1' and d.Disciplina = 'Baze de date' and Nota <> 6 and Nota <> 8;
 ```
+![Task2](https://user-images.githubusercontent.com/34598688/47902137-36244580-de8a-11e8-9812-54e5116b70a8.png)
 
 
 3. Rezolvați aceeși sarcină, 1, apelând la structura selectivă CASE.
@@ -41,4 +42,3 @@ where Tip_Evaluare = 'Testul 1' and d.Disciplina = 'Baze de date' and Nota <> 6 
 ```
 
 ```
-
