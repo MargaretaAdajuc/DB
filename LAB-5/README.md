@@ -85,9 +85,10 @@ on s.Id_Student = sr.Id_Student
 inner join discipline as d
 on d.Id_Disciplina = sr.Id_Disciplina
 where Tip_Evaluare = 'Testul 1' and d.Disciplina = 'Baze de date' and Nota <> 6 and Nota <> 8;
+raiserror ('Asa student nu exista', 16, 1);
 end try
 begin catch
 print 'Error'
 end catch
 ```
-![Task2_try_catch](https://user-images.githubusercontent.com/34598688/47989022-7b47b200-e0ec-11e8-8bf3-d6a37064abf1.png)
+![Task2_try_catch_raiserror](https://user-images.githubusercontent.com/34598688/47994018-d9c75d00-e0f9-11e8-8613-78a5746194cd.png)
