@@ -61,22 +61,21 @@ DECLARE @MAI_MARE INT;
 SET @N1 = 60 * RAND()
 SET @N2 = 60 * RAND()
 SET @N3 = 60 * RAND()
-if @N1 > @N2 set @MAI_MARE = @N1
-else set @MAI_MARE = @N2
-if @N2 > @N3 set @MAI_MARE = @N2
-else set @MAI_MARE = @N3
-if @N3 > @N1 set @MAI_MARE = @N3
-else set @MAI_MARE = @N1
+if @N1 > @N2 and @N1 > @N3 set @MAI_MARE = @N1
+else if @N2 > @N1 and @N2 > @N3 set @MAI_MARE = @N2
+else if @N3 > @N1 and @N3 > @N2 set @MAI_MARE = @N3
+else
+raiserror('Asa valoare a fost declarata de 2 ori', 16, 1);
+end try
+begin catch
+print ' ERROR :' + cast(ERROR_LINE() as varchar(20));
+end catch
 PRINT @N1;
 PRINT @N2;
 PRINT @N3;
 PRINT 'Mai mare = ' + CAST(@MAI_MARE AS VARCHAR(2));
-end try
-begin catch
-print 'Error'
-end catch
 ```
-![Task1_try_catch](https://user-images.githubusercontent.com/34598688/47988317-9285a000-e0ea-11e8-82a1-763a708f74b5.png)
+![Task1_try_catch_raiserror](https://user-images.githubusercontent.com/34598688/47993843-49891800-e0f9-11e8-9e06-f5d94de49368.png)
 
 ```
 begin try
