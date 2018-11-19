@@ -1,3 +1,5 @@
+# LAB7
+
 1. Creați o diagramă a bazei de date, folosind forma de vizualizare standard, structura căreia este descrisă la începutul sarcinilor practice din capitolul 4.
 
 ![task1](https://user-images.githubusercontent.com/34598688/48687415-f8355a00-ebc9-11e8-8075-de82018f1a42.png)
