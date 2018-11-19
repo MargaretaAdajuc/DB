@@ -1,8 +1,8 @@
-1. Creați o diagramă a bazei de date, folosind forma de vizualizare standard, structura căreia este descrisă la începutul sarcinilor practice din capitolul 4. 4.
+1. Creați o diagramă a bazei de date, folosind forma de vizualizare standard, structura căreia este descrisă la începutul sarcinilor practice din capitolul 4.
 
+![task1](https://user-images.githubusercontent.com/34598688/48687415-f8355a00-ebc9-11e8-8075-de82018f1a42.png)
 
-2. Sa se adauge constrangeri referentiale (legate cu tabelele studenti ~i profesori) necesare
-coloanelor Sef_grupa ~i Prof_Indrumator (sarcina3, capitolul 6) din tabelul grupe.
+2. Să se adauge constrângeri referențiale (legate cu tabelele studenti și profesori) necesare coloanelor Sef_grupa și Prof_Indrumator (sarcina3, capitolul 6) din tabelul grupe.
 
 
 
