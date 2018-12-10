@@ -2,7 +2,7 @@
 
 1. Să se scrie o instrucțiune T-SQL, care ar popula coloana Adresa_Postala_Profesor din tabelul profesori cu valoarea 'mun. Chisinau', unde adresa este necunoscută.
 
-```
+```sql
 update profesori 
 set Adresa_Postala_Profesor = 'mun.Chisinau'
 where Adresa_Postala_Profesor IS NULL;
@@ -16,7 +16,7 @@ FROM profesori;
 a) Câmpul Cod_ Grupa să accepte numai valorile unice și să nu accepte valori necunoscute.  
 b) Să se țină cont că cheia primară, deja, este definită asupra coloanei Id_Grupa.  
 
-```
+```sql
 alter table grupe 
 add unique (Cod_Grupa)
 alter table grupe 
@@ -33,7 +33,7 @@ b) Profesorul îndrumător trebuie să predea un număr maximal posibil de disci
 poate fi îndrumator la mai multe grupe.  
 c) Să se scrie instrucțiunile ALTER, SELECT, UPDATE necesare pentru crearea coloanelor în tabelul grupe, pentru selectarea candidatilor și inserarea datelor.  
 
-```
+```sql
 ALTER TABLE grupe
 ADD Sef_Grupa INT
 
@@ -58,9 +58,15 @@ order by q2.nr_Disciplina desc) where Id_Grupa = @index;
 set @index += 1;
 END
 
-
 select *
 from grupe
 ```
 
 ![Ex_3](https://user-images.githubusercontent.com/34598688/49717237-09b8d180-fc5f-11e8-8ade-67bd7f8956c5.png)
+
+4. Să se scrie o instrucțiune T-SQL, care ar mări toate notele de evaluare șefilor de grupe cu un punct. Nota maximală (10) nu poate fi mărită. 
+
+```sql
+
+```
+
