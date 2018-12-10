@@ -8,7 +8,7 @@ CREAREA SI MODIFICAREA TABELELOR IN SQL SERVER MANAGEMENT STUDIO
 Doar a si b, pentru ca numarul total de cifre e 4, iar numarul de cifre dupa virgula e 1.
  
 [EX_2]
-Pentru a pastra rexultatul Col1*Col2se va utiliza tipul de date DECIMAL(2,1), pentru rezultatul curent al inmultirii sau DECIMAL(5, 3), pentru a aloca mai multa precizie in cazul in care se schimba valorile coloanelor sau se adauga altele noi.
+Pentru a pastra rexultatul Col1*Col2, se va utiliza tipul de date DECIMAL(2,1), pentru rezultatul curent al inmultirii sau DECIMAL(5, 3), pentru a aloca mai multa precizie in cazul in care se schimba valorile coloanelor sau se adauga altele noi.
 
 [EX_3]
 Screenshoturi la tabele
