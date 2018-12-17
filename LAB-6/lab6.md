@@ -171,7 +171,7 @@ SELECT din Lucrarea practica 4. Rezultatele optimizarii sa fie analizate in baza
 Indecsii nou-creati sa fie plasati fizic in grupul de fisiere userdatafgroupl (Crearea $i intrefinerea bazei de date - sectiunea 2.2.2)
 
  ``` sql
-ALTER DATABASE universitatea ADD FILE ( NAME = Indexes, FILENAME = 'd:\indexes_universitateaDB.ndf', SIZE = 1MB)
+ALTER DATABASE universitatea ADD FILE ( NAME = Indexes, FILENAME = 'd:\indexes_universitatea.ndf', SIZE = 1MB)
 TO FILEGROUP userdatafgroupl GO
 
 DROP index pk_discipline on discipline
@@ -211,9 +211,3 @@ discipline (id_disciplina)
 ON [userdatafgroupl]
 
 ```
-
-
-
-
-
-
