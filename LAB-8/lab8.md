@@ -5,33 +5,20 @@ Prima viziune sa fie construita in Editorul de interogari, iar a doua, utilizand
 CREATE VIEW ViewEX18_fromLAB4_forLAB8
 AS
 SELECT DISTINCT p.Nume_Profesor, p.Prenume_Profesor
-FROM profesori p JOIN studenti.studenti_reusita r
+FROM profesori p JOIN studenti_reusita r
 ON p.Id_Profesor=r.Id_Profesor
 JOIN discipline d
 ON r.Id_Disciplina=d.Id_Disciplina
 WHERE d.Nr_ore_plan_disciplina<60;
 
-
 Select * from ViewEX18_fromLAB4_forLAB8;
-
-Select * from ViewEX6_fromLAB4_forLAB8;
 ```
+![image](https://user-images.githubusercontent.com/34598688/50075524-dab6d880-01e7-11e9-8b85-8534270cfda0.png)
 
 2. Sa se scrie cate un exemplu de instructiuni INSERT, UPDATE, DELETE asupra viziunilor create. 
  Sa se adauge comentariile respective referitoare la rezultatele executarii acestor instructiuni. 
 
 ``` sql
-INSERT INTO dbo.ViewEX6_fromLAB4_forLAB8 (Nume_Student, Prenume_Student) 
-VALUES ('Diacenco', 'Margareta'); --Viziunea este construita pe baza cheii primare id_student, care nu permite valori nule, de aceea obtinem eroare.
-
-UPDATE dbo.ViewEX6_fromLAB4_forLAB8 
-SET Prenume_Student='Ion'
-WHERE Prenume_Student='Vasile';
-
-DELETE FROM dbo.ViewEX6_fromLAB4_forLAB8
-WHERE Prenume_Student='Ivan'; --Stergerea unui tuplu din viziune, necesita stergerea acestuia din tabelul studenti, pe baza caruia acesta este construit, ceea ce nu este posibil.
-
-
 INSERT INTO dbo.ViewEX18_fromLAB4_forLAB8 (Nume_Profesor, Prenume_Profesor)
 VALUES ('Cojanu', 'Irina'); --Nu poate fi executata intrucat contine clauza distinct 
 
@@ -42,56 +29,36 @@ WHERE Prenume_Profesor='Alexandru';
 DELETE FROM dbo.ViewEX18_fromLAB4_forLAB8
 WHERE Prenume_Profesor='Diana'; 
 ```
+![image](https://user-images.githubusercontent.com/34598688/50075607-15b90c00-01e8-11e9-937b-30c6a19205b3.png)
+![image](https://user-images.githubusercontent.com/34598688/50075654-2e292680-01e8-11e9-9a97-649f8f1823d7.png)
+![image](https://user-images.githubusercontent.com/34598688/50075686-4305ba00-01e8-11e9-8788-f1f3087fb7ca.png)
 
-3. Sa se scrie instructiunile SQL care ar modifica viziunile create (in exercitiul 1) in ~a fel, incat sa nu fie posibila modificarea sau ~tergerea
-tabelelor pe care acestea sunt definite ~i viziunile sa nu accepte operatiuni DML, daca conditiile clauzei WHERE nu sunt satis:facute.
+3. Sa se scrie instructiunile SQL care ar modifica viziunile create (in exercitiul 1) in ~a fel, incat sa nu fie posibila modificarea sau ~tergerea tabelelor pe care acestea sunt definite ~i viziunile sa nu accepte operatiuni DML, daca conditiile clauzei WHERE nu sunt satis:facute.
 
 ``` sql
-ALTER VIEW ViewEX6_fromLAB4_forLAB8
-WITH SCHEMABINDING
-AS
-SELECT TOP(5) WITH TIES studenti.studenti.Nume_Student, studenti.studenti.Prenume_Student
-FROM  plan_studii.discipline INNER JOIN studenti.studenti_reusita 
-ON plan_studii.discipline.Id_Disciplina = studenti.studenti_reusita.Id_Disciplina INNER JOIN studenti.studenti 
-ON studenti.studenti_reusita.Id_Student = studenti.studenti.Id_Student
-WHERE        (studenti.studenti_reusita.Tip_Evaluare = 'Testul 2') AND (plan_studii.discipline.Disciplina = 'Baze de date')
-ORDER BY studenti.studenti_reusita.Nota DESC
-
-
 ALTER VIEW ViewEX18_fromLAB4_forLAB8
 WITH SCHEMABINDING
 AS
-SELECT DISTINCT cadre_didactice.profesori.Nume_Profesor, cadre_didactice.profesori.Prenume_Profesor
-FROM cadre_didactice.profesori  JOIN studenti.studenti_reusita 
-ON cadre_didactice.profesori.Id_Profesor=studenti.studenti_reusita.Id_Profesor
-JOIN plan_studii.discipline
-ON studenti.studenti_reusita.Id_Disciplina=plan_studii.discipline.Id_Disciplina
-WHERE plan_studii.discipline.Nr_ore_plan_disciplina<60
-WITH CHECK OPTION; 
+SELECT DISTINCT profesori.Nume_Profesor, profesori.Prenume_Profesor
+FROM profesori  JOIN studenti_reusita 
+ON profesori.Id_Profesor=studenti_reusita.Id_Profesor
+JOIN discipline
+ON studenti_reusita.Id_Disciplina=discipline.Id_Disciplina
+WHERE discipline.Nr_ore_plan_disciplina<60
+WITH CHECK OPTION;
 ```
+![image](https://user-images.githubusercontent.com/34598688/50075995-19995e00-01e9-11e9-8b79-72a596e2d830.png)
 4. Sa se scrie instructiunile de testare a proprietatilor noi definite.
 
 ``` sql
-SELECT * FROM ViewEX6_fromLAB4_forLAB8;
-
 SELECT * FROM ViewEX18_fromLAB4_forLAB8;
-
-INSERT INTO ViewEX6_fromLAB4_forLAB8
-VALUES ('Popescu', 'Dumitru');
-
 INSERT INTO ViewEX18_fromLAB4_forLAB8
 VALUES ('Popescu', 'Dumitru');
-
-UPDATE ViewEX6_fromLAB4_forLAB8 SET Nume_Student='Mocanu'
-WHERE Prenume_Student = 'Alexandru';
-
 UPDATE ViewEX18_fromLAB4_forLAB8 SET Nume_Profesor='Mocanu'
 WHERE Prenume_Profesor = 'Alexandru';
-
-DELETE FROM ViewEX6_fromLAB4_forLAB8 WHERE Prenume_Student='Maria';
-
 DELETE FROM ViewEX18_fromLAB4_forLAB8 WHERE Prenume_Profesor='Maria';
 ```
+![image](https://user-images.githubusercontent.com/34598688/50076089-5cf3cc80-01e9-11e9-893e-11bc94ba79d3.png)
 
 5. Sa se rescrie 2 interogari formulate in exercitiile din capitolul 4, in ~a fel. incat interogarile imbricate sa fie redate sub forma expresiilor CTE.
 ``` sql
@@ -112,6 +79,8 @@ on s.Id_Student=r.Id_Student
 group by s.Nume_Student, s.Prenume_Student, r.Id_Grupa)
 SELECT * FROM CTE2;
 ```
+![image](https://user-images.githubusercontent.com/34598688/50076671-01c2d980-01eb-11e9-89d4-9a3970ca3b40.png)
+![image](https://user-images.githubusercontent.com/34598688/50076717-1b642100-01eb-11e9-90db-2492f31abbe5.png)
 
 6. Se considera un graf orientat, precum cel din figura de mai jos ~i fie se dore~te parcursa calea de la nodul id = 3 la nodul unde id = 0. 
 Sa se faca reprezentarea grafului orientat in forma de expresie-tabel recursiv. Sa se observe instructiunea de dupa UNION ALL a membrului recursiv,  precum ~i partea de pana la UNION ALL reprezentata de membrul-ancora. 
@@ -147,4 +116,4 @@ ON graph.pred_ID=recursion.ID
 )
 SELECT * FROM recursion
 ``` 
-
+![image](https://user-images.githubusercontent.com/34598688/50076792-4babbf80-01eb-11e9-9662-6f7226433425.png)
