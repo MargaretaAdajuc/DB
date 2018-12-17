@@ -171,43 +171,8 @@ SELECT din Lucrarea practica 4. Rezultatele optimizarii sa fie analizate in baza
 Indecsii nou-creati sa fie plasati fizic in grupul de fisiere userdatafgroupl (Crearea $i intrefinerea bazei de date - sectiunea 2.2.2)
 
  ``` sql
-ALTER DATABASE universitatea ADD FILE ( NAME = Indexes, FILENAME = 'd:\indexes_universitatea.ndf', SIZE = 1MB)
-TO FILEGROUP userdatafgroupl GO
-
-DROP index pk_discipline on discipline
-
 CREATE nonclustered index pk_id_disciplina ON discipline (id_disciplina)
-
-DROP index pk_grupe on grupe
-
 CREATE nonclustered index pk_id_grupa ON grupe (id_grupa)
-
-DROP index pk_profesori on profesori
-
 CREATE nonclustered index pk_id_profesor ON profesori (id_profesor)
-
-DROP index pk_studenti on studenti
-
 CREATE nonclustered index pk_id_student ON studenti (id_student)
-
-
-DROP INDEX pk_discipline on discipline
-
-ALTER DATABASE universitatea
-ADD FILEGROUP userdatafgroupl
-GO
-
-ALTER DATABASE universitatea
-ADD FILE
-( NAME = Indexes,
-FILENAME = 'd:\db.ndf',
-SIZE = 1MB
-)
-TO FILEGROUP userdatafgroupl
-GO
-
-CREATE NONCLUSTERED INDEX pk_id_disciplina1 ON
-discipline (id_disciplina)
-ON [userdatafgroupl]
-
 ```
