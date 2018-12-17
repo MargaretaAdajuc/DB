@@ -67,6 +67,58 @@ from grupe
 4. Să se scrie o instrucțiune T-SQL, care ar mări toate notele de evaluare șefilor de grupe cu un punct. Nota maximală (10) nu poate fi mărită. 
 
 ```sql
+UPDATE studenti_reusita 
+SET Nota=Nota+1
+WHERE Nota<>10 and Nota IN ( SELECT Nota
+  FROM studenti_reusita
+  WHERE Id_Student IN
+  (SELECT  Sef_Grupa
+  FROM grupe));
+```
+![image](https://user-images.githubusercontent.com/34598688/50067091-db3f7700-01c7-11e9-95fc-c59d4d62d397.png)
 
+5. Sa se creeze un tabel profesori_new, care include urmatoarele coloane:
+   Id_Profesor, Nume _ Profesor, Prenume _ Profesor, Localitate, Adresa _ 1, Adresa _2.
+   a) Coloana Id_Profesor trebuie sa fie definita drept cheie primara si, in baza ei, sa fie construit un index CLUSTERED. 
+   b) Campul Localitate trebuie sa posede proprietatea DEF A ULT= 'mun. Chisinau'.
+   c) Sa se insereze toate datele din tabelul profesori in tabelul profesori_new. Sa se scrie, cu acest scop, un numar potrivit de instructiuni T-SQL.
+   in coloana Localitate sii fie inserata doar informatia despre denumirea localitatii din coloana-sursa Adresa_Postala_Profesor. in coloana Adresa_l,
+   doar denumirea strazii. in coloana Adresa_2, sa se pastreze numarul casei si (posibil) a apartamentului.
+   
+   ```sql
+   create table profesori_new
+	(Id_Profesor int NOT NULL, Nume_Profesor char(255), Prenume_Profesor char(255), Localitate char (255) DEFAULT ('mun. Chisinau'),
+	Adresa_1 char (255), Adresa_2 char (255), CONSTRAINT [PK_profesori_new] PRIMARY KEY CLUSTERED (Id_Profesor)) ON [PRIMARY]
+
+  select * from profesori_new;
+
+  insert profesori_new (Id_Profesor,Nume_Profesor, Prenume_Profesor, Localitate,Adresa_1, Adresa_2)
+	(SELECT Id_Profesor, Nume_Profesor, Prenume_Profesor, Adresa_Postala_Profesor, Adresa_Postala_Profesor, Adresa_Postala_Profesor
+	from profesori)
+
+  UPDATE profesori_new
+	SET Localitate = (case when CHARINDEX(', s.',Localitate) > 0
+				               then case when CHARINDEX (', str.',Localitate) > 0 
+				                             then SUBSTRING (Localitate, 1, CHARINDEX (', str.',Localitate) -1)
+					                     when CHARINDEX (', bd.',Localitate) > 0 
+							                 then SUBSTRING (Localitate, 1, CHARINDEX (', bd.',Localitate) -1)
+				           end
+				           when  CHARINDEX(', or.',Localitate) > 0
+				               then case when CHARINDEX (', str.',Localitate) > 0 
+							                 then SUBSTRING (Localitate,1, CHARINDEX ('str.',Localitate) -3)
+					                     when CHARINDEX (', bd.',Localitate) > 0 
+										     then SUBSTRING (Localitate,1, CHARINDEX ('bd.',Localitate) -3)
+					       end
+				           when CHARINDEX('mun.',Localitate) > 0 
+						       then SUBSTRING(Localitate, 1, CHARINDEX('nau',Localitate)+2)
+				end),
+	Adresa_1 = (case when CHARINDEX('str.', Adresa_1) > 0
+					     then SUBSTRING(Adresa_1,CHARINDEX('str',Adresa_1), PATINDEX('%, [0-9]%',Adresa_1)- CHARINDEX('str.',Adresa_1))
+			         when CHARINDEX('bd.',Adresa_1) > 0 
+					     then SUBSTRING(Adresa_1,CHARINDEX('bd',Adresa_1), PATINDEX('%, [0-9]%',Adresa_1) -  CHARINDEX('bd.',Adresa_1))
+			   end),
+	Adresa_2 = case when PATINDEX('%, [0-9]%',Adresa_2) > 0
+					    then SUBSTRING(Adresa_2, PATINDEX('%, [0-9]%',Adresa_2) +1,len(Adresa_2) - PATINDEX('%, [0-9]%',Adresa_2) +1)
+				end
 ```
 
