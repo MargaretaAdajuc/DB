@@ -122,3 +122,28 @@ WHERE Nota<>10 and Nota IN ( SELECT Nota
 				end
 ```
 
+![image](https://user-images.githubusercontent.com/34598688/50067185-77697e00-01c8-11e9-9e41-a1d75f32e6ac.png)
+![image](https://user-images.githubusercontent.com/34598688/50067224-aed82a80-01c8-11e9-8f3e-282cb56ff1e1.png)
+
+6. Sa se insereze datele in tabelul orarul pentru Grupa= 'CIBJ 71' (Id_ Grupa= 1) pentru ziua de luni. Toate lectiile vor avea loc in blocul de studii 'B'. 
+Mai jos, sunt prezentate detaliile de inserare: (ld_Disciplina = 107, Id_Profesor= 101, Ora ='08:00', Auditoriu = 202); 
+(Id_Disciplina = 108, Id_Profesor= 101, Ora ='11:30', Auditoriu = 501); (ld_Disciplina = 119, Id_Profesor= 117, Ora ='13:00', Auditoriu 
+= 501);
+```sql
+CREATE TABLE orarul ( Id_Disciplina INT, Id_Profesor INT, Id_Grupa INT DEFAULT(1), Zi CHAR(255), Ora TIME, Auditoriu INT,
+					  Bloc CHAR(1) DEFAULT('B'), PRIMARY KEY (Id_Grupa, Zi, Ora))
+
+INSERT INTO orarul (Id_Disciplina , Id_Profesor, Zi, Ora, Auditoriu)
+       VALUES ( 107, 101, 'Lu','08:00', 202 )
+INSERT INTO orarul (Id_Disciplina , Id_Profesor, Zi, Ora, Auditoriu)
+       VALUES ( 108, 101, 'Lu','11:30', 501 )
+INSERT INTO orarul (Id_Disciplina , Id_Profesor, Zi, Ora, Auditoriu)
+       VALUES ( 109, 117, 'Lu','13:00', 501 )
+
+SELECT * FROM orarul;
+
+DROP TABLE orarul;
+
+```
+
+
