@@ -90,18 +90,18 @@ WHERE Nota<>10 and Nota IN ( SELECT Nota
 	(Id_Profesor int NOT NULL, Nume_Profesor char(255), Prenume_Profesor char(255), Localitate char (255) DEFAULT ('mun. Chisinau'),
 	Adresa_1 char (255), Adresa_2 char (255), CONSTRAINT [PK_profesori_new] PRIMARY KEY CLUSTERED (Id_Profesor)) ON [PRIMARY]
 
-  select * from profesori_new;
+  	select * from profesori_new;
 
-  insert profesori_new (Id_Profesor,Nume_Profesor, Prenume_Profesor, Localitate,Adresa_1, Adresa_2)
+  	insert profesori_new (Id_Profesor,Nume_Profesor, Prenume_Profesor, Localitate,Adresa_1, Adresa_2)
 	(SELECT Id_Profesor, Nume_Profesor, Prenume_Profesor, Adresa_Postala_Profesor, Adresa_Postala_Profesor, Adresa_Postala_Profesor
 	from profesori)
 
-  UPDATE profesori_new
+  	UPDATE profesori_new
 	SET Localitate = (case when CHARINDEX(', s.',Localitate) > 0
 				               then case when CHARINDEX (', str.',Localitate) > 0 
 				                             then SUBSTRING (Localitate, 1, CHARINDEX (', str.',Localitate) -1)
 					                     when CHARINDEX (', bd.',Localitate) > 0 
-							                 then SUBSTRING (Localitate, 1, CHARINDEX (', bd.',Localitate) -1)
+							                 then SUBSTRING (Localitate, 1, CHARINDEX (', bd.',Localitate) 			-1)
 				           end
 				           when  CHARINDEX(', or.',Localitate) > 0
 				               then case when CHARINDEX (', str.',Localitate) > 0 
