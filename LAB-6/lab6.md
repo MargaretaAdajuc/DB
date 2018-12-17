@@ -176,3 +176,7 @@ CREATE nonclustered index pk_id_grupa ON grupe (id_grupa)
 CREATE nonclustered index pk_id_profesor ON profesori (id_profesor)
 CREATE nonclustered index pk_id_student ON studenti (id_student)
 ```
+Before indexes
+![image](https://user-images.githubusercontent.com/34598688/50073976-18653280-01e3-11e9-9d2f-2c370b91d80f.png)
+After indexes
+![image](https://user-images.githubusercontent.com/34598688/50074048-4f3b4880-01e3-11e9-995a-a7a70931a50d.png)
