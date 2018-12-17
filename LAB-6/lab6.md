@@ -126,9 +126,9 @@ WHERE Nota<>10 and Nota IN ( SELECT Nota
 ![image](https://user-images.githubusercontent.com/34598688/50067185-77697e00-01c8-11e9-9e41-a1d75f32e6ac.png)
 ![image](https://user-images.githubusercontent.com/34598688/50067224-aed82a80-01c8-11e9-8f3e-282cb56ff1e1.png)
 
-	6. Sa se insereze datele in tabelul orarul pentru Grupa= 'CIBJ 71' (Id_ Grupa= 1) pentru ziua de luni. Toate lectiile vor avea loc in blocul de studii 'B'. Mai jos, sunt prezentate detaliile de inserare: (ld_Disciplina = 107, Id_Profesor= 101, Ora ='08:00', Auditoriu = 202); (Id_Disciplina = 108, Id_Profesor= 101, Ora ='11:30', Auditoriu = 501); (ld_Disciplina = 119, Id_Profesor= 117, Ora ='13:00', Auditoriu = 501);
+6. Sa se insereze datele in tabelul orarul pentru Grupa= 'CIBJ 71' (Id_ Grupa= 1) pentru ziua de luni. Toate lectiile vor avea loc in blocul de studii 'B'. Mai jos, sunt prezentate detaliile de inserare: (ld_Disciplina = 107, Id_Profesor= 101, Ora ='08:00', Auditoriu = 202); (Id_Disciplina = 108, Id_Profesor= 101, Ora ='11:30', Auditoriu = 501); (ld_Disciplina = 119, Id_Profesor= 117, Ora ='13:00', Auditoriu = 501);
 
-	```sql
+```sql
 CREATE TABLE orarul ( Id_Disciplina INT, Id_Profesor INT, Id_Grupa INT DEFAULT(1), Zi CHAR(255), Ora TIME, Auditoriu INT,
 					  Bloc CHAR(1) DEFAULT('B'), PRIMARY KEY (Id_Grupa, Zi, Ora))
 
@@ -143,5 +143,77 @@ SELECT * FROM orarul;
 ```
 
 ![image](https://user-images.githubusercontent.com/34598688/50067312-1aba9300-01c9-11e9-9c50-82c45ca251b5.png)
+
+7. Sa se scrie expresiile T-SQL necesare pentru a popula tabelul orarul pentru grupa INFl 71 , ziua de luni.
+Datele necesare pentru inserare trebuie sa fie colectate cu ajutorul instructiunii/instructiunilor 
+SELECT ~i introduse in tabelul-destinatie, ~tiind ca: lectie #1 (Ora ='08:00', Disciplina = 'Structuri de date si algoritmi', Prof esor ='Bivol Ion')
+ lectie #2 (Ora ='11 :30', Disciplina = 'Programe aplicative', Profesor ='Mircea Sorin') lectie #3 (Ora ='13:00', Disciplina ='Baze de date', Profesor = 'Micu Elena')
+ ```sql
+ INSERT INTO orarul (Id_Disciplina, Id_Profesor, Id_Grupa, Zi, Ora)
+values ((select Id_Disciplina from discipline where Disciplina = 'Structuri de date si algoritmi'),
+		(select Id_Profesor from profesori where Nume_Profesor = 'Bivol' and Prenume_Profesor = 'Ion'),
+		(select Id_Grupa from grupe where Cod_Grupa = 'INF171'), 'Lu', '08:00')
+
+INSERT INTO orarul (Id_Disciplina, Id_Profesor, Id_Grupa, Zi, Ora)
+values ((select Id_Disciplina from discipline where Disciplina = 'Programe aplicative'),
+		(select Id_Profesor from profesori where Nume_Profesor = 'Mircea' and Prenume_Profesor = 'Sorin'),
+		(select Id_Grupa from grupe where Cod_Grupa = 'INF171'), 'Lu', '11:30')
+
+INSERT INTO orarul (Id_Disciplina, Id_Profesor, Id_Grupa, Zi, Ora)
+values ((select Id_Disciplina from discipline where Disciplina = 'Baze de date'),
+		(select Id_Profesor from profesori where Nume_Profesor = 'Micu' and Prenume_Profesor = 'Elena'),
+		(select Id_Grupa from grupe where Cod_Grupa = 'INF171'), 'Lu', '13:00')
+ ```
+ ![image](https://user-images.githubusercontent.com/34598688/50067466-c2d05c00-01c9-11e9-9415-39522ff557f3.png)
+ 
+ 8. Sa se scrie interogarile de creare a indecsilor asupra tabelelor din baza de date universitatea pentru a asigura o performanta sporita la executarea interogarilor 
+SELECT din Lucrarea practica 4. Rezultatele optimizarii sa fie analizate in baza planurilor de executie, pana la si dupa crearea indecsilor. 
+Indecsii nou-creati sa fie plasati fizic in grupul de fisiere userdatafgroupl (Crearea $i intrefinerea bazei de date - sectiunea 2.2.2)
+
+ ``` sql
+ALTER DATABASE universitatea ADD FILE ( NAME = Indexes, FILENAME = 'd:\indexes_universitateaDB.ndf', SIZE = 1MB)
+TO FILEGROUP userdatafgroupl GO
+
+DROP index pk_discipline on discipline
+
+CREATE nonclustered index pk_id_disciplina ON discipline (id_disciplina)
+
+DROP index pk_grupe on grupe
+
+CREATE nonclustered index pk_id_grupa ON grupe (id_grupa)
+
+DROP index pk_profesori on profesori
+
+CREATE nonclustered index pk_id_profesor ON profesori (id_profesor)
+
+DROP index pk_studenti on studenti
+
+CREATE nonclustered index pk_id_student ON studenti (id_student)
+
+
+DROP INDEX pk_discipline on discipline
+
+ALTER DATABASE universitatea
+ADD FILEGROUP userdatafgroupl
+GO
+
+ALTER DATABASE universitatea
+ADD FILE
+( NAME = Indexes,
+FILENAME = 'd:\db.ndf',
+SIZE = 1MB
+)
+TO FILEGROUP userdatafgroupl
+GO
+
+CREATE NONCLUSTERED INDEX pk_id_disciplina1 ON
+discipline (id_disciplina)
+ON [userdatafgroupl]
+
+```
+
+
+
+
 
 
