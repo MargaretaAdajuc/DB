@@ -95,6 +95,15 @@ DELETE FROM ViewEX18_fromLAB4_forLAB8 WHERE Prenume_Profesor='Maria';
 
 5. Sa se rescrie 2 interogari formulate in exercitiile din capitolul 4, in ~a fel. incat interogarile imbricate sa fie redate sub forma expresiilor CTE.
 ``` sql
+WITH CTE1 
+AS
+(select s.Nume_Student, s.Prenume_Student,r.Id_Disciplina --utilizand exemplul 31 din laboratorul 4
+from studenti.studenti_reusita r 
+join studenti.studenti s on r.Id_Student = s.Id_Student
+where r.Nota <= 4
+group by Nume_Student,Prenume_Student,Id_Disciplina
+having count(r.nota)>2)
+SELECT * FROM CTE1;
 WITH CTE2
 AS
 (select s.Nume_Student, s.Prenume_Student, avg(r.Nota) as Media, r.Id_Grupa --utilizand exemplul 32 din laboratorul 4
@@ -103,4 +112,39 @@ on s.Id_Student=r.Id_Student
 group by s.Nume_Student, s.Prenume_Student, r.Id_Grupa)
 SELECT * FROM CTE2;
 ```
+
+6. Se considera un graf orientat, precum cel din figura de mai jos ~i fie se dore~te parcursa calea de la nodul id = 3 la nodul unde id = 0. 
+Sa se faca reprezentarea grafului orientat in forma de expresie-tabel recursiv. Sa se observe instructiunea de dupa UNION ALL a membrului recursiv,  precum ~i partea de pana la UNION ALL reprezentata de membrul-ancora. 
+``` sql
+DECLARE @Table1 TABLE
+(
+ID INT,
+pred_ID INT
+)
+
+INSERT  @Table1
+SELECT 5, NULL UNION ALL
+SELECT 4, NULL UNION ALL
+SELECT 3, NULL UNION ALL
+SELECT 0, 5 UNION ALL
+SELECT 2, 4 UNION ALL
+SELECT 2, 3 UNION ALL
+SELECT 1, 2 UNION ALL
+SELECT 0, 1;
+
+WITH recursion
+AS 
+(
+SELECT *, pred_ID as pred_Nod, 0 AS generatie 
+FROM @Table1
+WHERE pred_ID IS NULL
+AND ID=3
+UNION ALL
+SELECT graph.*, recursion.ID AS predecesor, generatie +1
+FROM @Table1 AS graph
+INNER JOIN recursion
+ON graph.pred_ID=recursion.ID
+)
+SELECT * FROM recursion
+``` 
 
