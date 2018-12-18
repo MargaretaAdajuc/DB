@@ -1,33 +1,31 @@
-1. Sa se creeze un dosar Backup_labll. Sa se execute un backup complet al bazei de date
-universitatea in acest dosar. Fi~ierul copiei de rezerva sa se numeasca exercitiull.bak. Sa se
-scrie instructiunea SQL respectiva.
+1. Să se creeze un dosar Backup_labll. Să se execute un backup complet al bazei de date universitatea în acest dosar. Fișierul copiei de rezervă să se numească exercitiull.bak. Să se scrie instrucțiunea SQL respectivă.
 ``` sql
 BACKUP DATABASE universitatea  
 TO DISK = 'D:\Backup_lab11\exercitiul1.Bak'  
 WITH FORMAT 
-BACKUP LOG universitatea TO DISK = 'C:\Users\ritad\Documents\DB\Backup_lab11\exercitiul1.Bak'
+BACKUP LOG universitatea TO DISK = 'D:\Backup_lab11\exercitiul1.Bak'
 ```
-2 Sa se scrie instructiunea unui backup diferentiat al bazei de date universitatea. Fi~ierul copiei
-de rezerva sa se numeasca exercitiul2.bak.
+![image](https://user-images.githubusercontent.com/34598688/50133811-de089d80-0295-11e9-9501-834fefe7c268.png)
+
+2. Să se scrie instrucțiunea unui backup diferențiat al bazei de date universitatea. Fișierul copiei de rezervă să se numească exercitiul2.bak.
 ``` sql
 BACKUP DATABASE universitatea  
 TO DISK = 'D:\Backup_lab11\exercitiul2.Bak'  
 WITH DIFFERENTIAL 
-BACKUP LOG universitatea TO DISK = 'C:\Users\ritad\Documents\DB\Backup_lab11\exercitiul2.Bak'
+BACKUP LOG universitatea TO DISK = 'D:\Backup_lab11\exercitiul2.Bak'
 ``` 
-3 Sa se scrie instructiunea unui backup al jurnalului de tranzactii al bazei de date universitatea.
-Fi~ierul copiei de rezerva sa se numeasca exercitiul3.bak
+![image](https://user-images.githubusercontent.com/34598688/50133846-05f80100-0296-11e9-9a25-47ece29bc310.png)
+3. Să se scrie instrucțiunea unui backup al jurnalului de tranzacții al bazei de date universitatea. Fișierul copiei de rezervă să se numească exercitiul3.bak
 ``` sql
 BACKUP LOG universitatea  
-   TO DISK = 'C:\Users\ritad\Documents\DB\Backup_lab11\exercitiul3.Bak'
+   TO DISK = 'D:\Backup_lab11\exercitiul3.Bak'
 ``` 
-4 Sa se execute restaurarea consecutiva a tuturor copiilor de rezerva create. Recuperarea trebuie
-sa fie realizata intr-o baza de date noua universitatea_labll. Fi~ierele bazei de date noise afla
-in dosarul BD_labll. Sa se scrie instructiunile SQL respective
+![image](https://user-images.githubusercontent.com/34598688/50133876-38096300-0296-11e9-8d4f-8450c492d383.png)
+4. Să se execute restaurarea consecutivă a tuturor copiilor de rezervă create. Recuperarea trebuie să fie realizată într-o bază de date nouă universitatea_labll. Fișierele bazei de date noi se află în dosarul BD_labll. Să se scrie instrucțiunile SQL respective.
 ``` sql
-use universitatea_1
+use universitatea1
 RESTORE FILELISTONLY  
-   FROM DISK = 'C:\Users\ritad\Documents\DB\Backup_lab11\exercitiul1.Bak';  
+   FROM DISK = 'D:\Backup_lab11\exercitiul1.Bak';  
 RESTORE DATABASE universitatea1  
-   FROM DISK = 'C:\Users\ritad\Documents\DB\Backup_lab11\exercitiul1.Bak';  
+   FROM DISK = 'D:\Backup_lab11\exercitiul1.Bak'; 
 ``` 
