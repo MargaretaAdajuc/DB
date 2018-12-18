@@ -6,52 +6,53 @@ use universitatea
 
 DROP TRIGGER IF EXISTS Inregistrare_noua 
 GO
-CREATE TRIGGER Inregistrare_noua ON plan_studii.orarul
+CREATE TRIGGER Inregistrare_noua ON orarul
 AFTER UPDATE
 AS SET NOCOUNT ON
 IF UPDATE(Auditoriu)
-SELECT 'Disciplina ' + UPPER(plan_studii.discipline.Disciplina)+ 
+SELECT 'Disciplina ' + UPPER(discipline.Disciplina)+ 
 		'Grupa: ' + grupe.Cod_Grupa +
 		'Ziua: ' + CAST(inserted.Zi as VARCHAR(5)) + 
 		'Ora ' + CAST(inserted.Ora as VARCHAR(5)) + 
 		'Auditoriul nou: ' + CAST(inserted.Auditoriu as VARCHAR(5)) + CAST(inserted.Bloc as VARCHAR(5)) +
 		'Auditoriul vechi: ' + CAST(deleted.Auditoriu as VARCHAR(5))
-FROM inserted,deleted, plan_studii.discipline, grupe
-WHERE deleted.Id_Disciplina = plan_studii.discipline.Id_Disciplina
+FROM inserted,deleted, discipline, grupe
+WHERE deleted.Id_Disciplina = discipline.Id_Disciplina
 AND inserted.Id_Grupa = grupe.Id_Grupa
 
 
 GO
-UPDATE plan_studii.orarul
+UPDATE orarul
 SET Auditoriu = 200
-WHERE Id_Grupa = 1 AND Id_Profesor = 117; 
+WHERE Id_Grupa = 1 AND Id_Profesor = 117;
 ```
+![image](https://user-images.githubusercontent.com/34598688/50133088-c380f500-0292-11e9-8e38-a2c706fb2374.png)
 2. Sa se creeze declan~atorul, care ar asigura popularea corecta (consecutiva) a tabelelor studenti
 ~i studenti_reusita, ~i ar permite evitarea erorilor la nivelul cheilor exteme.
 ``` sql
 
-CREATE TRIGGER EX2 ON studenti.studenti_reusita
+CREATE TRIGGER EX ON studenti_reusita
 INSTEAD OF INSERT
 AS SET NOCOUNT ON
    
-  INSERT INTO studenti.studenti_reusita 
+  INSERT INTO studenti_reusita 
   SELECT * FROM inserted
-  WHERE Id_Student in (SELECT Id_Student FROM studenti.studenti)
+  WHERE Id_Student in (SELECT Id_Student FROM studenti)
   
 
-  INSERT INTO studenti.studenti values (667,'Nume', 'Prenume', '1998-06-07', 'MD-2022')
-  INSERT INTO studenti.studenti_reusita values (667, 101, 101, 1, 'Examen', null, null)
+  INSERT INTO studenti values (667,'Nume', 'Prenume', '1998-06-07', 'MD-2022')
+  INSERT INTO studenti_reusita values (667, 101, 101, 1, 'Examen', null, null)
 
  
-  select * from studenti.studenti where Id_Student= 667
-  select * from studenti.studenti_reusita where Id_Student = 667
+  select * from studenti where Id_Student= 667
+  select * from studenti_reusita where Id_Student = 667
 ```
-
+![image](https://user-images.githubusercontent.com/34598688/50133174-1f4b7e00-0293-11e9-85d9-eaf54d4498a4.png)
 3. Sa se creeze un declan~ator, care ar interzice mic~orarea notelor in tabelul studenti_reusita ~i
 modificarea valorilor campului Data_Evaluare, unde valorile acestui camp sunt nenule. Declan~atorul trebuie sa se lanseze, numai daca sunt afectate datele studentilor din grupa
 ,,CIB171". Se va afi~a un mesaj de avertizare in cazul tentativei de a incalca constrangerea.
 ``` sql
-CREATE TRIGGER EX3 ON studenti.studenti_reusita
+CREATE TRIGGER EX3 ON studenti_reusita
 AFTER UPDATE
 AS
 SET NOCOUNT ON
@@ -85,7 +86,7 @@ GO
 
 DECLARE @CIB_ID INT = (SELECT Id_Grupa FROM grupe WHERE Cod_Grupa = 'CIB171')
 
-UPDATE studenti.studenti_reusita
+UPDATE studenti_reusita
 SET Data_Evaluare = '2018-01-01'
 WHERE Id_Grupa = @CIB_ID; 
 
@@ -93,7 +94,7 @@ GO
 
 DECLARE @CIB_ID INT = (SELECT Id_Grupa FROM grupe WHERE Cod_Grupa = 'CIB171')
 
-UPDATE studenti.studenti_reusita
+UPDATE studenti_reusita
 SET Nota = 8
 WHERE Nota = 9 AND Id_Grupa = @CIB_ID;
 
@@ -155,7 +156,7 @@ ALTER TABLE test_ex_5 ALTER COLUMN column1 varchar(1230);
 6. Sa se creeze un declan~ator DDL care, la modificarea proprietatilor coloanei ld_Profesor
 dintr-un tabel, ar face schimbari asemanatoare in mod automat in restul tabelelor.
 ``` sql
-CREATE TRIGGER EX6
+CREATE TRIGGER e6
 ON DATABASE
 FOR ALTER_TABLE
 AS
@@ -172,11 +173,11 @@ BEGIN
 
 SELECT @COMANDA = EVENTDATA().value ('(/EVENT_INSTANCE/TSQLCommand/CommandText)[1]', 'nvarchar(max)')
 SELECT @TABELUL = EVENTDATA().value ('(/EVENT_INSTANCE/ObjectName)[1]','nvarchar(max)')
-SELECT @COMANDA_NOUA = REPLACE(@ID_PROFESOR, @TABELUL, 'studenti.studenti_reusita');
+SELECT @COMANDA_NOUA = REPLACE(@ID_PROFESOR, @TABELUL, 'studenti_reusita');
 EXECUTE (@COMANDA_NOUA)
-SELECT @COMANDA_NOUA = REPLACE(@ID_PROFESOR, @TABELUL, 'cadre_didactice.profesori');
+SELECT @COMANDA_NOUA = REPLACE(@ID_PROFESOR, @TABELUL, 'profesori');
 EXECUTE (@COMANDA_NOUA)
-SELECT @COMANDA_NOUA = REPLACE(@ID_PROFESOR, @TABELUL, 'plan_studii.orarul');
+SELECT @COMANDA_NOUA = REPLACE(@ID_PROFESOR, @TABELUL, 'orarul');
 EXECUTE (@COMANDA_NOUA)
 
 PRINT 'Data Modified Across All Occurences'
