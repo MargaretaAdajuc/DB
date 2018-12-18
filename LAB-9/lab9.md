@@ -28,7 +28,7 @@ order by d.disciplina desc;
 ```
 
 2. Sa se creeze o procedura stocata, care nu are niciun parametru de intrare ~i poseda un parametru de ie~ire. 
-Parametrul de ie~ire trebuie sa returneze numarul de studenti, care nu au sustinut eel putin o forma de evaluare (nota mai mica de 5 sau valoare NULL). 
+Parametrul de ie~ire trebuie sa returneze numarul de studenti, care nu au sustinut cel putin o forma de evaluare (nota mai mica de 5 sau valoare NULL). 
 ```sql
 CREATE PROCEDURE lab9_ex2
    @count_students INT = NULL OUTPUT
@@ -43,13 +43,13 @@ DECLARE @count_students INT
 EXEC lab9_ex2 @count_students OUTPUT
 PRINT 'Nr de studenti ce nu au sustinut cel putin o forma de evaluare = ' + cast(@count_students as VARCHAR(3))
 ```
+![image](https://user-images.githubusercontent.com/34598688/50132316-35efd600-028f-11e9-8871-16e369fe920f.png)
+
 3. Sa se creeze o procedura stocata, care ar insera in baza de date informatii despre un student nou. 
 In calitate de parametri de intrare sa serveasca datele personale ale studentului nou ~i Cod_ Grupa. 
 Sa se genereze toate intrarile-cheie necesare in tabelul studenti_reusita. Notele de evaluare sa fie inserate ca NULL.
 ```sql
-select * from grupe;
-
-CREATE PROCEDURE lab9_ex3 
+CREATE PROCEDURE ex3 
 @nume VARCHAR(50),
 @prenume VARCHAR(50),
 @data DATE,
@@ -59,18 +59,10 @@ CREATE PROCEDURE lab9_ex3
 AS
 INSERT INTO studenti 
 VALUES (175, @nume, @prenume, @data, @adresa)
-INSERT INTO studenti.studenti_reusita
+INSERT INTO studenti_reusita
 VALUES (175, 100, 100 , (SELECT Id_Grupa FROM grupe WHERE Cod_Grupa = @cod_grupa), 'Testul 1', NULL, '2018-12-05')
 
-Exec lab9_ex3 @nume='Lungu', @prenume='Mariana', @data='1998-12-08', @adresa= 'mun. Chsinau, str. Paris, 38/2', @cod_grupa='TI171';
-
-Select * from studenti;
-
-Select * from profesori;
-
-Select * from studenti.studenti_reusita where Id_Profesor=101;
-
-select * from discipline;
+Exec ex3 @nume='Lungu', @prenume='Mariana', @data='1998-12-08', @adresa= 'mun. Chsinau, str. Paris, 38/2', @cod_grupa='TI171';
 ```
 
 4. Fie ca un profesor se elibereaza din functie la mijlocul semestrului. 
@@ -91,22 +83,22 @@ AS
 IF(
 	( SELECT discipline.Id_Disciplina 
 	  FROM discipline 
-	  WHERE Disciplina = @disciplina) IN ( SELECT DISTINCT studenti.studenti_reusita.Id_Disciplina 
-										   FROM studenti.studenti_reusita
-										   WHERE Id_Profesor = (SELECT cadre_didactice.profesori.Id_Profesor 
-																FROM cadre_didactice.profesori 
+	  WHERE Disciplina = @disciplina) IN ( SELECT DISTINCT studenti_reusita.Id_Disciplina 
+										   FROM studenti_reusita
+										   WHERE Id_Profesor = (SELECT profesori.Id_Profesor 
+																FROM profesori 
 																WHERE Nume_Profesor = @nume_vechi AND Prenume_Profesor = @prenume_vechi)
 										  )
 	)
 BEGIN
 
-UPDATE studenti.studenti_reusita
+UPDATE studenti_reusita
 SET Id_Profesor =  (SELECT Id_Profesor
-			      FROM cadre_didactice.profesori
+			      FROM profesori
 				  WHERE Nume_Profesor = @nume_nou AND   Prenume_Profesor = @prenume_nou)
 
 WHERE Id_Profesor = (SELECT Id_profesor
-					 FROM cadre_didactice.profesori
+					 FROM profesori
      			     WHERE Nume_Profesor = @nume_vechi AND Prenume_Profesor = @prenume_vechi)
 
 END
@@ -131,24 +123,24 @@ CREATE PROCEDURE lab9_ex5
 AS
 DECLARE @best TABLE (Id_Student int, Media float)
 INSERT INTO @best
-	SELECT TOP (3) studenti.studenti_reusita.Id_Student, AVG(cast (Nota as float)) as Media
-	FROM studenti.studenti_reusita, discipline
-	WHERE discipline.Id_Disciplina = studenti.studenti_reusita.Id_Disciplina
+	SELECT TOP (3) studenti_reusita.Id_Student, AVG(cast (Nota as float)) as Media
+	FROM studenti_reusita, discipline
+	WHERE discipline.Id_Disciplina = studenti_reusita.Id_Disciplina
 	AND discipline.Disciplina = @discipline
-	GROUP BY studenti.studenti_reusita.Id_Student
+	GROUP BY studenti_reusita.Id_Student
 	ORDER BY Media desc		
 
 SELECT cod_grupa, nume_student+' '+Prenume_Student as Nume, disciplina, nota AS Nota_Veche, iif(nota > 9, 10, nota + 1) AS Nota_Noua 
-    FROM studenti.studenti_reusita, discipline, grupe, studenti
-	WHERE discipline.id_disciplina = studenti.studenti_reusita.id_disciplina
-	AND grupe.Id_Grupa = studenti.studenti_reusita.Id_Grupa
-	AND  studenti.Id_Student = studenti.studenti_reusita.Id_Student
+    FROM studenti_reusita, discipline, grupe, studenti
+	WHERE discipline.id_disciplina = studenti_reusita.id_disciplina
+	AND grupe.Id_Grupa = studenti_reusita.Id_Grupa
+	AND  studenti.Id_Student = studenti_reusita.Id_Student
 	AND studenti.Id_Student in (select Id_Student from @best)
 	AND Disciplina = @discipline
 	AND Tip_Evaluare = 'Examen'
 
-UPDATE studenti.studenti_reusita
-SET studenti.studenti_reusita.Nota = (CASE WHEN nota >= 9 THEN 10 ELSE nota + 1 END)
+UPDATE studenti_reusita
+SET studenti_reusita.Nota = (CASE WHEN nota >= 9 THEN 10 ELSE nota + 1 END)
 WHERE Tip_Evaluare = 'Examen'
 AND Id_Disciplina = (Select Id_Disciplina from discipline where disciplina=@discipline)
 AND Id_Student in (select Id_Student from @best)
@@ -164,11 +156,11 @@ RETURNS TABLE
 AS
 RETURN
 (SELECT distinct profesori.Nume_Profesor ,profesori.Prenume_Profesor
-FROM studenti.studenti_reusita join profesori
-on studenti.studenti_reusita.Id_Profesor=profesori.Id_Profesor
+FROM studenti_reusita join profesori
+on studenti_reusita.Id_Profesor=profesori.Id_Profesor
  join discipline
-on studenti.studenti_reusita.Id_Disciplina=discipline.Id_Disciplina
-where discipline.Disciplina=@disciplina and studenti.studenti_reusita.Data_Evaluare like @data_like and studenti.studenti_reusita.Nota<@nota)
+on studenti_reusita.Id_Disciplina=discipline.Id_Disciplina
+where discipline.Disciplina=@disciplina and studenti_reusita.Data_Evaluare like @data_like and studenti_reusita.Nota<@nota)
 
 create function lab9_ex6_30 (@disciplina varchar(20), @tip_evaluare varchar(20), @data1 varchar(20), @data2 varchar(20))
 returns table
@@ -177,10 +169,10 @@ return
 (select count(x.Id_Student) "No of students", avg(x.reusita_curenta) "Media curenta totala"
 from
 (select distinct r.Id_Student, t.reusita_curenta
-from studenti.studenti_reusita r join discipline d
+from studenti_reusita r join discipline d
 on r.Id_Disciplina=d.Id_Disciplina
 join (select r.id_student, avg(r.nota) as reusita_curenta
-	  from studenti.studenti_reusita r
+	  from studenti_reusita r
 	  where r.Tip_Evaluare=@tip_evaluare
 	  group by r.Id_Student) as t
 on r.Id_Student=t.Id_Student
@@ -206,14 +198,14 @@ RETURNS INT
 Se define~te urmatorul format al functiei: <nume_functie> (<Nume_Prenume_Student>). 
 Sa fie afi~at tabelul cu urmatoarele campuri: Nume_Prenume_Student, Disciplina, Nota, Data_Evaluare.
 ``` sql
-CREATE FUNCTION lab9_ex8 (@nume_prenume_s VARCHAR(50))
+CCREATE FUNCTION lab9_ex8 (@nume_prenume_s VARCHAR(50))
 RETURNS TABLE 
 AS
 RETURN
 (SELECT Nume_Student + ' ' + Prenume_Student as Student, Disciplina, Nota, Data_Evaluare
- FROM studenti, discipline, studenti.studenti_reusita
- WHERE studenti.Id_Student = studenti.studenti_reusita.Id_Student
- AND discipline.Id_Disciplina = studenti.studenti_reusita.Id_Disciplina 
+ FROM studenti, discipline, studenti_reusita
+ WHERE studenti.Id_Student = studenti_reusita.Id_Student
+ AND discipline.Id_Disciplina = studenti_reusita.Id_Disciplina 
  AND Nume_Student + ' ' + Prenume_Student = @nume_prenume_s )
 ```
 9. Se cere realizarea unei functii definite de utilizator, care ar gasi cel mai sarguincios sau cel mai slab student dintr-o grupa. 
@@ -221,7 +213,7 @@ Se define~te urmatorul format al functiei: <nume_functie> (<Cod_ Grupa>, <is_goo
 Parametrul <is_good> poate accepta valorile "sarguincios" sau "slab", respectiv. 
 Functia sa returneze un tabel cu urmatoarele campuri Grupa, Nume_Prenume_Student, Nota Medie , is_good. Nota Medie sa fie cu precizie de 2 zecimale.
 ``` sql
-CREATE FUNCTION lab9_ex9 (@cod_grupa VARCHAR(10), @is_good VARCHAR(20))
+ CREATE FUNCTION lab9_ex9 (@cod_grupa VARCHAR(10), @is_good VARCHAR(20))
 RETURNS @Test Table (Cod_Grupa varchar(10), Student varchar (100), Media decimal(4,2), Reusita varchar(20))
 AS
 begin
@@ -232,9 +224,9 @@ insert into @Test
 
 SELECT top (1) Cod_Grupa, Nume_Student + ' ' + Prenume_Student as Student,
 		 CAST(AVG( Nota * 1.0) as decimal (4,2)) as Media, @is_good
- FROM grupe,studenti, studenti.studenti_reusita
- WHERE grupe.Id_Grupa = studenti.studenti_reusita.Id_Grupa
- AND studenti.Id_Student = studenti.studenti_reusita.Id_Student
+ FROM grupe,studenti, studenti_reusita
+ WHERE grupe.Id_Grupa = studenti_reusita.Id_Grupa
+ AND studenti.Id_Student = studenti_reusita.Id_Student
  AND Cod_Grupa = @cod_grupa
  GROUP BY Cod_Grupa, Nume_Student, Prenume_Student
  Order by Media desc
@@ -246,9 +238,9 @@ SELECT top (1) Cod_Grupa, Nume_Student + ' ' + Prenume_Student as Student,
  insert into @Test
 SELECT top (1) Cod_Grupa, Nume_Student + ' ' + Prenume_Student as Student,
 		 CAST(AVG( Nota * 1.0) as decimal (4,2)) as Media, @is_good
- FROM grupe,studenti, studenti.studenti_reusita
- WHERE grupe.Id_Grupa = studenti.studenti_reusita.Id_Grupa
- AND studenti.Id_Student = studenti.studenti_reusita.Id_Student
+ FROM grupe,studenti, studenti_reusita
+ WHERE grupe.Id_Grupa = studenti_reusita.Id_Grupa
+ AND studenti.Id_Student = studenti_reusita.Id_Student
  AND Cod_Grupa = @cod_grupa
  GROUP BY Cod_Grupa, Nume_Student, Prenume_Student
  Order by Media 
