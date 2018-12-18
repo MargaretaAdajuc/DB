@@ -21,7 +21,7 @@ BACKUP LOG universitatea
    TO DISK = 'D:\Backup_lab11\exercitiul3.Bak'
 ``` 
 ![image](https://user-images.githubusercontent.com/34598688/50133876-38096300-0296-11e9-8d4f-8450c492d383.png)
-4. Să se execute restaurarea consecutivă a tuturor copiilor de rezervă create. Recuperarea trebuie să fie realizată într-o bază de date nouă universitatea_labll. Fișierele bazei de date noi se află în dosarul BD_labll. Să se scrie instrucțiunile SQL respective.
+4. Să se execute restaurarea consecutivă a tuturor copiilor de rezervă create. Recuperarea trebuie să fie realizată într-o bază de date nouă universitatea_lab11. Fișierele bazei de date noi se află în dosarul BD_lab11. Să se scrie instrucțiunile SQL respective.
 ``` sql
 use universitatea1
 RESTORE FILELISTONLY  
